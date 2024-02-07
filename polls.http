@@ -2,5 +2,9 @@ POST http://localhost:3333/polls HTTP/1.1
 content-type: application/json
 
 {
-    "title": "Poll creation test"
+    "title": "Poll creation test",
+    "options": ["Express", "Fastify", "NestJS", "HapiJS"]
 }
+
+###
+GET http://localhost:3333/polls/1a937dd8-cde2-476a-912c-a7756f52c0d0 HTTP/1.1
