@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { prisma } from '../../lib/prisma'
 import { FastifyInstance } from 'fastify'
 import { redis } from '../../lib/redis'
+import { voting } from '../../utils/voting-pub-sub'
 
 export async function voteOnPoll(app: FastifyInstance) {
   app.post('/polls/:pollId/vote', async (request, reply) => {
@@ -42,7 +43,15 @@ export async function voteOnPoll(app: FastifyInstance) {
           id: userPreviousVoteOnPoll.id,
         },
       })
-      await redis.zincrby(pollId, -1, userPreviousVoteOnPoll.pollOptionId)
+      const votes = await redis.zincrby(
+        pollId,
+        -1,
+        userPreviousVoteOnPoll.pollOptionId
+      )
+      voting.publish(pollId, {
+        pollOptionId: userPreviousVoteOnPoll.pollOptionId,
+        votes: Number(votes),
+      })
     }
     await prisma.vote.create({
       data: {
@@ -51,7 +60,11 @@ export async function voteOnPoll(app: FastifyInstance) {
         pollOptionId,
       },
     })
-    await redis.zincrby(pollId, 1, pollOptionId)
+    const votes = await redis.zincrby(pollId, 1, pollOptionId)
+    voting.publish(pollId, {
+      pollOptionId,
+      votes: Number(votes),
+    })
     return reply.status(201)
   })
 }

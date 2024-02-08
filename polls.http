@@ -7,12 +7,12 @@ content-type: application/json
 }
 
 ###
-GET http://localhost:3333/polls/63738fe3-732e-4257-915a-4f4b947863ce HTTP/1.1
+GET http://localhost:3333/polls/65553b77-c115-4c8c-985a-e4e5036f270a HTTP/1.1
 
 ###
-POST http://localhost:3333/polls/63738fe3-732e-4257-915a-4f4b947863ce/vote HTTP/1.1
-content-type: application/json
+POST http://localhost:3333/polls/65553b77-c115-4c8c-985a-e4e5036f270a/vote HTTP/1.1
+Content-Type: application/json
 
 {
-    "pollOptionId": "cf3a5eaa-c127-4b1a-b7d9-0da203277db0"
+    "pollOptionId": "dec85fee-5a5d-4474-9634-7b2494f083d5"
 }
