@@ -23,6 +23,32 @@ export async function voteOnPoll(app: FastifyInstance) {
         httpOnly: true,
       })
     }
-    return reply.status(201).send({ sessionId })
+    const userPreviousVoteOnPoll = await prisma.vote.findUnique({
+      where: {
+        pollId_sessionId: {
+          sessionId,
+          pollId,
+        },
+      },
+    })
+    if (userPreviousVoteOnPoll) {
+      if (userPreviousVoteOnPoll.pollOptionId === pollOptionId)
+        return reply
+          .status(400)
+          .send({ message: 'You already voted on this poll.' })
+      await prisma.vote.delete({
+        where: {
+          id: userPreviousVoteOnPoll.id,
+        },
+      })
+    }
+    await prisma.vote.create({
+      data: {
+        sessionId,
+        pollId,
+        pollOptionId,
+      },
+    })
+    return reply.status(201)
   })
 }
