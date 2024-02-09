@@ -1,5 +1,3 @@
-import dotenv from 'dotenv'
-dotenv.config()
 import fastify from 'fastify'
 import cookie from '@fastify/cookie'
 import websocket from '@fastify/websocket'
@@ -19,4 +17,4 @@ app.register(createPoll)
 app.register(getPoll)
 app.register(voteOnPoll)
 app.register(pollResults)
-app.listen({ port: 3333 }, () => console.log('Http server running'))
+app.listen({ port: 3333 }, () => console.log('Http server running.'))
