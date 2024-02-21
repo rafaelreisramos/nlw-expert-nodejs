@@ -65,6 +65,6 @@ export async function voteOnPoll(app: FastifyInstance) {
       pollOptionId,
       votes: Number(votes),
     })
-    return reply.status(201)
+    return reply.status(204).send()
   })
 }
